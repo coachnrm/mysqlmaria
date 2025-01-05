@@ -3,7 +3,7 @@
 @using Microsoft.AspNetCore.SignalR.Client;
 @using LiveDataMySql.Data;
 @using LiveDataMySql.Services;
-@inject IEmployeeService employeeService;
+@inject EmployeeService employeeService;
 @inject NavigationManager Navigation
 @inject HttpClient Http
 
@@ -67,3 +67,4 @@
         _ = hubConnection.DisposeAsync();
     }
 }
+

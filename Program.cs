@@ -18,8 +18,8 @@ builder.Services.AddRazorComponents()
 //         new MySqlServerVersion(new Version(10, 0, 0))));
 builder.Services.AddDbContextFactory<AppDbContext>(opt =>
          opt.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"), new MySqlServerVersion(new Version())));
+builder.Services.AddScoped<EmployeeService>();
 builder.Services.AddSignalR();     
-builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 builder.Services.AddResponseCompression(opts =>
     {
         opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
