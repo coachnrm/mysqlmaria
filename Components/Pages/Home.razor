@@ -1,0 +1,69 @@
+﻿@page "/"
+@rendermode InteractiveServer
+@using Microsoft.AspNetCore.SignalR.Client;
+@using LiveDataMySql.Data;
+@using LiveDataMySql.Services;
+@inject IEmployeeService employeeService;
+@inject NavigationManager Navigation
+@inject HttpClient Http
+
+<PageTitle>Live Data</PageTitle>
+
+@foreach (var emp in EmployeesList)
+{
+    <p>@emp.Name | @emp.Title</p>
+}
+
+
+@code {
+    Employee[] employees;
+    List<Employee> EmployeesList = new List<Employee>();
+    private HubConnection? hubConnection;
+
+    protected override async Task OnInitializedAsync()
+    {
+        EmployeesList = await employeeService.GetAllEmployees();
+
+        hubConnection = new HubConnectionBuilder()
+            .WithUrl(Navigation.ToAbsoluteUri("/employeehub"))
+            .Build();
+
+        hubConnection.On<List<Employee>>("RefreshEmployees", employees =>
+            {
+                EmployeesList = employees;
+                InvokeAsync(StateHasChanged);
+            });
+
+        hubConnection.On("ReceiveMessage", () =>
+        {
+            CallLoadData();
+            StateHasChanged();
+        });
+
+        await hubConnection.StartAsync();
+
+        await LoadData();
+    }
+
+    private void CallLoadData()
+    {
+        Task.Run(async () =>
+        {
+            await LoadData();
+        });
+    }
+
+    protected async Task LoadData()
+    {
+        employees = await Http.GetFromJsonAsync<Employee[]>("api/Employees");
+        StateHasChanged();
+    }
+
+    public bool IsConnected =>
+        hubConnection.State == HubConnectionState.Connected;
+
+    public void Dispose()
+    {
+        _ = hubConnection.DisposeAsync();
+    }
+}
