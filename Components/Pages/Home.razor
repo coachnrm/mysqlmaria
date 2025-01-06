@@ -22,7 +22,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        EmployeesList = await employeeService.GetAllEmployees();
+        //EmployeesList = await employeeService.GetAllEmployees();
 
         hubConnection = new HubConnectionBuilder()
             .WithUrl(Navigation.ToAbsoluteUri("/employeehub"))

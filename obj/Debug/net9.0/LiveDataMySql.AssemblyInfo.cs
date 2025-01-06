@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("LiveDataMySql")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d8b92b38e7cbf498d0492b54e016c2d14e4f4623")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4ab0a395c91332f400099f4aaa8dd5ddc45052f3")]
 [assembly: System.Reflection.AssemblyProductAttribute("LiveDataMySql")]
 [assembly: System.Reflection.AssemblyTitleAttribute("LiveDataMySql")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

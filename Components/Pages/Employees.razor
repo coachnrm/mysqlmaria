@@ -1,0 +1,72 @@
+﻿@page "/employees"
+@using LiveDataMySql.Services
+@inject EmployeeService EmployeeService
+@rendermode InteractiveServer
+
+<h3>Employee List</h3>
+<input/>
+
+@if (EmployeeService.Employees.Count == 0)
+{
+    <p>Loading employees...</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Title</th>
+            </tr>
+        </thead>
+        <tbody>
+            @RowsFragment
+        </tbody>
+    </table>
+}
+
+@code {
+    private RenderFragment RowsFragment => builder =>
+    {
+        int sequence = 0;
+        foreach (var employee in EmployeeService.Employees)
+        {
+            builder.OpenElement(sequence++, "tr");
+
+            builder.OpenElement(sequence++, "td");
+            builder.AddContent(sequence++, employee.Id);
+            builder.CloseElement();
+
+            builder.OpenElement(sequence++, "td");
+            builder.AddContent(sequence++, employee.Name);
+            builder.CloseElement();
+
+            builder.OpenElement(sequence++, "td");
+            builder.AddContent(sequence++, employee.Title);
+            builder.CloseElement();
+
+            builder.CloseElement();
+        }
+    };
+
+    private Timer? _timer;
+
+    protected override void OnInitialized()
+    {
+        // Set up a timer to refresh the UI every 1 seconds
+        _timer = new Timer(RefreshUI, null, 0, 1000); // Refresh every 10 seconds
+    }
+
+    private void RefreshUI(object? state)
+    {
+        InvokeAsync(StateHasChanged); // Refresh only the table rows
+    }
+
+    public void Dispose()
+    {
+        // Dispose of the timer to avoid resource leaks
+        _timer?.Dispose();
+    }
+}
+
